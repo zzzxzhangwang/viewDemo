@@ -1,17 +1,13 @@
 package com.etoak.service.Impl;
 
-import com.alibaba.fastjson.JSONObject;
 import com.etoak.service.YunHttpClentService;
 import com.etoak.util.Constants;
-import com.etoak.util.MD5Util;
+import com.etoak.util.Tool;
 import okhttp3.*;
 
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 
 @Service
@@ -25,32 +21,39 @@ public class YunHttpClentServiceImpl implements YunHttpClentService {
     private static final int SUCCESS_CODE = 200;
 
     @Override
-    public String createRoomTest(String data) throws IOException {
-        MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+    public String createRoomTest(String data){
         String result = "";
-        //String url = "http://www.cloudroom.com/api/createroom";
         OkHttpClient client = new OkHttpClient();
-
-        FormBody.Builder builder = new FormBody.Builder();
-
-        RequestBody requestBody = RequestBody.create(JSON, data);
-        Request request = new Request.Builder()
-                .url(Constants.URL_CREATE_ROOM)
-                .post(requestBody)
-                .build();
+        Request request = Tool.getRequest(data,Constants.URL_CREATE_ROOM);
         Response response;
         try {
             response = client.newCall(request).execute();
-//            System.out.println(response.body().string());
             result = response.body().string();
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-        }finally {
-
+            result = "出现错误";
         }
         return result;
     }
+
+    @Override
+    public String onlineusersnum(String data){
+        String result = "";
+        OkHttpClient client = new OkHttpClient();
+        Request request = Tool.getRequest(data,Constants.URL_ONLINE);
+        Response response;
+        try {
+            response = client.newCall(request).execute();
+            result = response.body().string();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            result = "出现错误";
+        }
+        return result;
+    }
+
     // 添加队列
     @Override
     public void addQueue() throws IOException {

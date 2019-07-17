@@ -50,4 +50,20 @@ public class YunHttpClentController {
         }
         return result;
     }
+    @GetMapping("/onlineusersnum")
+    public String onlineusersnum (String RoomIds) {
+        String result = "没有数据";
+        try {
+//            String data = "{'CompID':"+ Constants.CompID +",'SecretKey':"+Constants.CompSecret+",'LimitUserNum':'2'}";
+            Map<String,String> map = new HashMap<String,String>();
+            if (RoomIds == null){
+                return "参数不能为空";
+            }
+            map.put("RoomIds",RoomIds);
+            result =  yunHttpClentService.onlineusersnum(Tool.getParam(map));
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
 }
