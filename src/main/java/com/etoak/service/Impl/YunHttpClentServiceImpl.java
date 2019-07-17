@@ -2,18 +2,10 @@ package com.etoak.service.Impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.etoak.service.YunHttpClentService;
+import com.etoak.util.Constants;
 import com.etoak.util.MD5Util;
 import okhttp3.*;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.message.BasicHeader;
-import org.apache.http.util.EntityUtils;
+
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -33,29 +25,31 @@ public class YunHttpClentServiceImpl implements YunHttpClentService {
     private static final int SUCCESS_CODE = 200;
 
     @Override
-    public void createRoomTest() throws IOException {
+    public String createRoomTest(String data) throws IOException {
         MediaType JSON = MediaType.parse("application/json; charset=utf-8");
-        String url = "http://www.cloudroom.com/api/createroom";
+        String result = "";
+        //String url = "http://www.cloudroom.com/api/createroom";
         OkHttpClient client = new OkHttpClient();
 
-        //鍒涘缓琛ㄥ崟璇锋眰鍙傛暟
         FormBody.Builder builder = new FormBody.Builder();
-        String data = "{'CompID':'232918','SecretKey':'5ebeae75b9ab77eed46e1062e5b69abb','LimitUserNum':'2'}";
 
         RequestBody requestBody = RequestBody.create(JSON, data);
         Request request = new Request.Builder()
-                .url(url)
+                .url(Constants.URL_CREATE_ROOM)
                 .post(requestBody)
                 .build();
         Response response;
         try {
             response = client.newCall(request).execute();
-            System.out.println(response.body().string());
+//            System.out.println(response.body().string());
+            result = response.body().string();
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-        }
+        }finally {
 
+        }
+        return result;
     }
     // 添加队列
     @Override

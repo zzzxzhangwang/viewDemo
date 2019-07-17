@@ -7,7 +7,7 @@ import java.util.Map;
 
 public interface YunHttpClentService {
 
-    void createRoomTest() throws IOException;
+    String createRoomTest(String param) throws IOException;
 
     void addQueue() throws IOException;
 

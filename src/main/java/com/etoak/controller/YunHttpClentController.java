@@ -1,13 +1,20 @@
 package com.etoak.controller;
 
 import com.etoak.service.YunHttpClentService;
+import com.etoak.util.Constants;
+import com.etoak.util.Tool;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
+@ResponseBody
 public class YunHttpClentController {
 
     @Autowired
@@ -23,11 +30,24 @@ public class YunHttpClentController {
         }
     }
     @GetMapping("/createRoom")
-    public void create () {
+    public String create (String LimitUserNum,String NeedPswd,String IsRegular) {
+        String result = "没有数据";
         try {
-            yunHttpClentService.createRoomTest();
+//            String data = "{'CompID':"+ Constants.CompID +",'SecretKey':"+Constants.CompSecret+",'LimitUserNum':'2'}";
+            Map<String,String> map = new HashMap<String,String>();
+            if (LimitUserNum != null && !LimitUserNum.isEmpty()){
+                map.put("LimitUserNum",LimitUserNum);
+            }
+            if (NeedPswd != null && !NeedPswd.isEmpty()){
+                map.put("NeedPswd",NeedPswd);
+            }
+            if (IsRegular != null && !IsRegular.isEmpty()){
+                map.put("IsRegular",IsRegular);
+            }
+            result =  yunHttpClentService.createRoomTest(Tool.getParam(map));
         }catch (Exception e) {
             e.printStackTrace();
         }
+        return result;
     }
 }
